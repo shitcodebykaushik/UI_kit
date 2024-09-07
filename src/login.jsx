@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StatusBar, Image, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import LinearGradient from 'react-native-linear-gradient'; // Correct import for React Native CLI
 
 const CircularLogo = () => (
   <Image
@@ -10,25 +9,12 @@ const CircularLogo = () => (
   />
 );
 
-const WelcomeText = () => (
-  <View style={styles.welcomeTextContainer}>
-    <LinearGradient
-      colors={['#FF9933', '#FFFFFF', '#138808']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.gradientTextContainer}
-    >
-      <Text style={styles.welcomeText}>Welcome Onboard</Text>
-    </LinearGradient>
-  </View>
-);
-
 const TopWave = () => (
   <View style={styles.topWaveContainer}>
     <Svg width="150" height="80" viewBox="0 0 150 80" style={styles.wave}>
       <Path
         d="M0,30 C30,10 60,20 90,30 C120,40 150,20 150,30 L150,0 L0,0 Z"
-        fill="#FF9933" // Indian saffron color
+        fill="#FF9933"
       />
     </Svg>
   </View>
@@ -39,58 +25,47 @@ const BottomWave = () => (
     <Svg width="150" height="80" viewBox="0 0 150 80" style={styles.wave}>
       <Path
         d="M0,50 C30,70 60,60 90,50 C120,40 150,60 150,50 L150,80 L0,80 Z"
-        fill="#28A745" // Green color
+        fill="#28A745"
       />
     </Svg>
   </View>
 );
 
-const App = () => {
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [password, setPassword] = React.useState('');
+const OTPVerification = () => {
+  const [otp, setOtp] = useState('');
 
-  const handleLogin = () => {
-    const phoneNumberRegex = /^\d{10}$/;
-
-    if (!phoneNumber || !password) {
-      Alert.alert('Validation Error', 'Please enter both phone number and password.');
+  const handleVerifyOTP = () => {
+    if (!otp) {
+      Alert.alert('Validation Error', 'Please enter the OTP.');
       return;
     }
 
-    if (!phoneNumberRegex.test(phoneNumber)) {
-      Alert.alert('Validation Error', 'Phone number must be exactly 10 digits.');
-      return;
-    }
-
-    console.log('Login with:', phoneNumber, password);
+    // Implement your OTP verification logic here
+    console.log('Verifying OTP:', otp);
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <TopWave />
-      <WelcomeText />
+      <View style={styles.welcomeTextContainer}>
+        <View style={styles.solidBackground}>
+          <Text style={styles.welcomeText}>OTP Verification</Text>
+        </View>
+      </View>
       <CircularLogo />
       <View style={styles.form}>
         <TextInput
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          keyboardType="phone-pad"
-          maxLength={10}
-          placeholder="Phone Number"
+          value={otp}
+          onChangeText={setOtp}
+          keyboardType="numeric"
+          maxLength={6}
+          placeholder="Enter OTP"
           placeholderTextColor="#666"
           style={styles.input}
         />
-        <TextInput
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          placeholder="Password"
-          placeholderTextColor="#666"
-          style={styles.input}
-        />
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
+        <TouchableOpacity onPress={handleVerifyOTP} style={styles.button}>
+          <Text style={styles.buttonText}>Verify OTP</Text>
         </TouchableOpacity>
       </View>
       <BottomWave />
@@ -104,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   logo: {
     width: 100,
@@ -115,6 +90,7 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '80%',
+    marginTop: 20,
   },
   input: {
     height: 50,
@@ -160,11 +136,12 @@ const styles = StyleSheet.create({
   },
   welcomeTextContainer: {
     position: 'absolute',
-    top: 120, 
+    top: 120,
     alignItems: 'center',
   },
-  gradientTextContainer: {
+  solidBackground: {
     padding: 10,
+    backgroundColor: '#FF9933', // Solid background color
     borderRadius: 5,
   },
   welcomeText: {
@@ -174,4 +151,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default OTPVerification;
