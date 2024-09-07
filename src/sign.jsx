@@ -31,19 +31,19 @@ const BottomWave = () => (
   </View>
 );
 
-const OTPVerification = () => {
-  const [aadhaarNumber, setAadhaarNumber] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+const UserProfile = () => {
+  const [name, setName] = useState('');
+  const [sosPassword, setSosPassword] = useState('');
+  const [guardianNumber, setGuardianNumber] = useState('');
 
-  const handleSignIn = () => {
-    if (!aadhaarNumber || !phoneNumber) {
-      Alert.alert('Validation Error', 'Please enter Aadhaar number and phone number.');
+  const handleSaveProfile = () => {
+    if (!name || !sosPassword || !guardianNumber) {
+      Alert.alert('Validation Error', 'Please fill in all fields.');
       return;
     }
 
-    // Implement your sign-in logic here
-    console.log('Aadhaar Number:', aadhaarNumber);
-    console.log('Phone Number:', phoneNumber);
+    // Implement your save profile logic here
+    Alert.alert('Profile Saved', 'Your profile has been updated successfully.');
   };
 
   return (
@@ -52,31 +52,36 @@ const OTPVerification = () => {
       <TopWave />
       <View style={styles.welcomeTextContainer}>
         <View style={styles.solidBackground}>
-          <Text style={styles.welcomeText}>Sign In</Text>
+          <Text style={styles.welcomeText}>User Profile</Text>
         </View>
       </View>
       <CircularLogo />
       <View style={styles.form}>
         <TextInput
-          value={aadhaarNumber}
-          onChangeText={setAadhaarNumber}
-          keyboardType="numeric"
-          maxLength={12}
-          placeholder="Enter Aadhaar Number"
+          value={name}
+          onChangeText={setName}
+          placeholder="Enter Your Name"
           placeholderTextColor="#666"
           style={styles.input}
         />
         <TextInput
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          keyboardType="phone-pad"
-          maxLength={10}
-          placeholder="Enter Phone Number"
+          value={sosPassword}
+          onChangeText={setSosPassword}
+          placeholder="Enter SOS Password"
           placeholderTextColor="#666"
+          secureTextEntry
           style={styles.input}
         />
-        <TouchableOpacity onPress={handleSignIn} style={styles.button}>
-          <Text style={styles.buttonText}>Sign In</Text>
+        <TextInput
+          value={guardianNumber}
+          onChangeText={setGuardianNumber}
+          placeholder="Enter Guardian Number"
+          placeholderTextColor="#666"
+          keyboardType="phone-pad"
+          style={styles.input}
+        />
+        <TouchableOpacity onPress={handleSaveProfile} style={styles.button}>
+          <Text style={styles.buttonText}>Save Profile</Text>
         </TouchableOpacity>
       </View>
       <BottomWave />
@@ -162,4 +167,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OTPVerification;
+export default UserProfile;
