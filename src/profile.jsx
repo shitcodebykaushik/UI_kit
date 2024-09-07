@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, StatusBar } from 'react-native';
+import { View, StatusBar, Image, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+
+const CircularLogo = () => (
+  <Image
+    source={require('./assets/logo.png')}
+    style={styles.logo}
+  />
+);
 
 const TopWave = () => (
   <View style={styles.topWaveContainer}>
@@ -31,18 +38,19 @@ const UserProfile = () => {
 
   const handleSaveProfile = () => {
     if (!name || !sosPassword || !guardianNumber) {
-      Alert.alert('Validation Error', 'All fields are required.');
+      Alert.alert('Validation Error', 'Please fill in all fields.');
       return;
     }
 
-    // Here you can add logic to save the profile details, e.g., to a backend server or local storage
-    Alert.alert('Profile Saved', 'Your profile has been updated successfully!');
+    // Implement your save profile logic here
+    Alert.alert('Profile Saved', 'Your profile has been updated successfully.');
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
       <TopWave />
+      <CircularLogo />
       <View style={styles.formContainer}>
         <TextInput
           value={name}
@@ -84,9 +92,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     overflow: 'hidden',
   },
+  logo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    overflow: 'hidden',
+    marginBottom: 20,
+  },
   formContainer: {
     width: '80%',
-    padding: 20,
+    marginTop: 20,
   },
   input: {
     height: 50,
