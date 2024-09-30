@@ -1,81 +1,127 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, ScrollView, TextInput } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 
-export default function DashboardScreen() {
-  const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState([]);
+const FourBoxesPage = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [profileName, setProfileName] = useState('');
 
-  const addTask = () => {
-    if (task.trim() !== '') {
-      setTasks([...tasks, { id: tasks.length.toString(), text: task }]);
-      setTask('');
-    }
-  };
-
-  const removeTask = (id) => {
-    setTasks(tasks.filter((item) => item.id !== id));
+  // Image Picker Operation
+  const pickImage = () => {
+    launchImageLibrary({}, (response) => {
+      if (response.assets && response.assets.length > 0) {
+        setSelectedImage(response.assets[0].uri);
+      }
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard - To-Do List</Text>
-      <TextInput 
-        style={styles.input} 
-        placeholder="Enter a task" 
-        value={task}
-        onChangeText={setTask}
-      />
-      <Button title="Add Task" onPress={addTask} />
-      <FlatList
-        data={tasks}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.taskContainer}>
-            <Text style={styles.taskText}>{item.text}</Text>
-            <TouchableOpacity onPress={() => removeTask(item.id)}>
-              <Text style={styles.deleteText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+      {/* Box 1: Image Picker */}
+      <View style={styles.box}>
+        <TouchableOpacity onPress={pickImage} style={styles.button}>
+          <Text style={styles.buttonText}>Pick an Image</Text>
+        </TouchableOpacity>
+        {selectedImage && (
+          <Image source={{ uri: selectedImage }} style={styles.image} />
         )}
-      />
+      </View>
+
+      {/* Box 2: Scrollable List */}
+      <View style={styles.box}>
+        <Text style={styles.boxTitle}>Scrollable Items</Text>
+        <ScrollView style={styles.scrollView}>
+          {Array.from({ length: 10 }, (_, index) => (
+            <Text key={index} style={styles.scrollItem}>
+              Item {index + 1}
+            </Text>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Box 3: Update Profile */}
+      <View style={styles.box}>
+        <Text style={styles.boxTitle}>Update Profile</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter your name"
+          value={profileName}
+          onChangeText={setProfileName}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => alert(`Profile updated for ${profileName}`)}
+        >
+          <Text style={styles.buttonText}>Update Profile</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 40,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    padding: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  box: {
+    width: '45%',
+    height: 200,
     marginBottom: 20,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#3498db',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginTop: 10,
+  },
+  scrollView: {
+    width: '100%',
+    marginTop: 10,
+  },
+  scrollItem: {
+    padding: 5,
+    backgroundColor: '#dcdcdc',
+    marginBottom: 5,
     textAlign: 'center',
   },
-  input: {
+  boxTitle: {
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  textInput: {
+    width: '100%',
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ccc',
     borderWidth: 1,
-    marginBottom: 10,
     paddingHorizontal: 10,
+    marginBottom: 10,
     borderRadius: 5,
-  },
-  taskContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-    marginVertical: 5,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 5,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  taskText: {
-    fontSize: 16,
-  },
-  deleteText: {
-    color: 'red',
   },
 });
+
+export default FourBoxesPage;
